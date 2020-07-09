@@ -5,4 +5,4 @@ app = FastAPI()
 
 @app.get("/")
 async def home():
-    return "Welcome to your virtual bookshelf!"
+    return {"Welcome to your virtual bookshelf!"}
