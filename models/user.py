@@ -2,7 +2,7 @@ from pydantic import BaseModel
 import enum
 
 
-class Role(enum.Enum):
+class Role(str, enum.Enum):
     admin: str = "administrator"
     customer: str = "customer"
 
