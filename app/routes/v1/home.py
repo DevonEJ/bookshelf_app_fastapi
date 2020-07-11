@@ -1,8 +1,8 @@
-from fastapi import FastAPI
+from fastapi import APIRouter
 
-app_v1 = FastAPI(openapi_prefix="/v1")
+router = APIRouter()
 
 
-@app_v1.get("/")
+@router.get("/")
 async def home():
     return {"Welcome to your virtual bookshelf!"}
