@@ -8,4 +8,7 @@ def encrypt_password(password: str) -> CryptContext.__hash__:
 
 
 def check_encrypted_password(plaintext_password: str, encrypted_password: CryptContext.__hash__) -> bool:
-    return password_context.verify(plaintext_password, encrypted_password)
+    try:
+        return password_context.verify(plaintext_password, encrypted_password)
+    except Exception as e:
+        return False
