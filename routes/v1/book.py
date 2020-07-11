@@ -2,7 +2,7 @@ from fastapi import FastAPI, File
 from models.book import Book
 from models.author import Author
 
-app = FastAPI()
+app = FastAPI(openapi_prefix="/v1")
 
 
 @app.get("/book/{isbn}", response_model=Book, response_model_exclude=["author"])

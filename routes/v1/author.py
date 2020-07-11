@@ -2,7 +2,7 @@ from fastapi import FastAPI, Body
 from models.book import Book
 
 
-app = FastAPI()
+app = FastAPI(openapi_prefix="/v1")
 
 
 @app.get("/author/{id}/book")

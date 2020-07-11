@@ -1,6 +1,6 @@
 from fastapi import FastAPI
 
-app = FastAPI()
+app = FastAPI(openapi_prefix="/v1")
 
 
 @app.get("/")

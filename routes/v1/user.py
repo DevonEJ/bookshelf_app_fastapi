@@ -2,7 +2,7 @@ from fastapi import FastAPI, File
 from models.user import User
 from starlette.status import HTTP_201_CREATED
 
-app = FastAPI()
+app = FastAPI(openapi_prefix="/v1")
 
 
 @app.post("/user", status_code=HTTP_201_CREATED)
