@@ -3,6 +3,7 @@ from passlib.context import CryptContext
 password_context = CryptContext(schemes=["bcrypt"])
 
 
+# Encryption and verification of passwords
 def encrypt_password(password: str) -> CryptContext.__hash__:
     return password_context.hash(password)
 
@@ -12,3 +13,6 @@ def check_encrypted_password(plaintext_password: str, encrypted_password: CryptC
         return password_context.verify(plaintext_password, encrypted_password)
     except Exception as e:
         return False
+
+
+# Creation of JWT
