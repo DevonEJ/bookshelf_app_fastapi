@@ -1,5 +1,5 @@
 from pydantic import BaseModel
-from models.v1.book import Book
+from app.models import Book
 
 
 class Bookshelf(BaseModel):

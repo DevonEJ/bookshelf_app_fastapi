@@ -2,7 +2,7 @@ from pydantic import BaseModel
 from models.shared import Role
 
 
-class User(BaseModel):
+class JWTUser(BaseModel):
     username: str
     password: str
     disabled: bool

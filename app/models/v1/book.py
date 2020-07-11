@@ -1,5 +1,5 @@
 from pydantic import BaseModel
-from models.v1.author import Author
+from app.models import Author
 
 
 class Book(BaseModel):
