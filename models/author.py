@@ -1,5 +1,8 @@
 from pydantic import BaseModel
 import enum
+from typing import List
+
+from models.book import Book
 
 
 class Gender(str, enum.Enum):
@@ -14,3 +17,4 @@ class Author(BaseModel):
     country: str
     gender: Gender
     deceased: bool
+    books: List[Book]
