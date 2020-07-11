@@ -1,4 +1,4 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, File
 from models.book import Book
 from models.author import Author
 
@@ -27,5 +27,11 @@ async def get_book_by_isbn(isbn: str):
         "read_count": 5
     }
     book = Book(**book_dict)
-
     return book
+
+
+#TODO Fix 'unable to parse request body' error
+@app.post("/book/image")
+async def upload_book_image(book_image: bytes = File(...)):
+    return {"File": book_image}
+
