@@ -5,7 +5,7 @@ from models.author import Author
 app = FastAPI()
 
 
-@app.get("/book/{isbn}", response_model=Book)
+@app.get("/book/{isbn}", response_model=Book, response_model_exclude=["author"])
 async def get_book_by_isbn(isbn: str):
 
     author_dict = {
