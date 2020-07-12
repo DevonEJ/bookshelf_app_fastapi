@@ -1,6 +1,6 @@
 from pydantic import BaseModel
 from fastapi import Query
-from models.shared import Role
+from app.models.shared import Role
 
 
 class User(BaseModel):

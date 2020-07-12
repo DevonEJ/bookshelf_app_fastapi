@@ -1,5 +1,5 @@
 from fastapi import APIRouter, File
-from models.v1.user import User
+from app.models.v1.user import User
 from starlette.status import HTTP_201_CREATED
 
 router = APIRouter()

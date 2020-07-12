@@ -1,6 +1,6 @@
 from fastapi import APIRouter, File
-from models.v1.book import Book
-from models.v1.author import Author
+from app.models.v1.book import Book
+from app.models.v1.author import Author
 
 router = APIRouter()
 

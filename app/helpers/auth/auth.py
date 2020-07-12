@@ -1,3 +1,4 @@
+
 from passlib.context import CryptContext
 
 from app.models.v1.jwt_user import JWTUser
@@ -19,7 +20,7 @@ def check_encrypted_password(plaintext_password: str, encrypted_password: CryptC
 
 
 fake_jwt_user = {"username": "test", "password": "", "disabled": False, "role": "customer"}
-fake_jwt_user = JWTUser(fake_jwt_user)
+fake_jwt_user = JWTUser(**fake_jwt_user)
 
 
 print(encrypt_password("password"))

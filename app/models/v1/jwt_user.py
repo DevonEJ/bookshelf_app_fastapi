@@ -1,5 +1,5 @@
 from pydantic import BaseModel
-from models.shared import Role
+from app.models.shared import Role
 
 
 class JWTUser(BaseModel):
