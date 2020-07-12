@@ -14,7 +14,7 @@ load_dotenv(find_dotenv())
 # Loaded from .env file via settings.py
 JWT_SECRET_KEY = os.getenv("JWT_SECRET_KEY")
 JWT_ALGORITHM = os.getenv("JWT_ALGORITHM")
-JWT_EXPIRE_AFTER_MINUTES = os.getenv("JWT_EXPIRE_AFTER_MINUTES")
+JWT_EXPIRE_AFTER_MINUTES = float(os.getenv("JWT_EXPIRE_AFTER_MINUTES"))
 
 password_context = CryptContext(schemes=["bcrypt"])
 
@@ -33,7 +33,7 @@ def check_encrypted_password(plaintext_password: str, encrypted_password: CryptC
         return False
 
 
-fake_jwt_user = {"username": "test", "password": "", "disabled": False, "role": "customer"}
+fake_jwt_user = {"username": "test", "password": "test", "disabled": False, "role": "administrator"}
 fake_jwt_user = JWTUser(**fake_jwt_user)
 
 
