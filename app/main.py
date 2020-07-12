@@ -1,4 +1,4 @@
-from fastapi import FastAPI, Depends
+from fastapi import FastAPI, Depends, HTTPException
 from fastapi.security import OAuth2PasswordRequestForm
 from starlette.status import HTTP_401_UNAUTHORIZED
 
@@ -18,7 +18,7 @@ async def login_for_access_token(oauth_form: OAuth2PasswordRequestForm = Depends
 
     jwt_user = authenticate_user(unauth_user)
     if jwt_user is None:
-        return HTTP_401_UNAUTHORIZED
+        raise HTTPException(status_code=HTTP_401_UNAUTHORIZED)
     else:
         return create_jwt_token(jwt_user)
 
