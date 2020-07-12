@@ -4,7 +4,6 @@ from dotenv import find_dotenv, load_dotenv
 from datetime import datetime, timedelta
 from fastapi.security import OAuth2PasswordBearer
 from fastapi import Depends
-from starlette.status import HTTP_401_UNAUTHORIZED
 import jwt
 
 from app.models.v1.jwt_user import JWTUser
@@ -38,20 +37,21 @@ fake_jwt_user = JWTUser(**fake_jwt_user)
 
 
 # Creation of JWT
-def authenticate_user(username: str, password: str) -> bool:
+def authenticate_user(user: JWTUser) -> bool:
     # If user is in the database
-    if fake_jwt_user.username == username:
+    if fake_jwt_user.username == user.username:
         if not fake_jwt_user.disabled:
-            if check_encrypted_password(password, encrypt_password(fake_jwt_user.password)):
+            if check_encrypted_password(user.password, encrypt_password(fake_jwt_user.password)):
                 return True
 
     return False
 
 
-def create_jwt_token(username: str) -> str:
+def create_jwt_token(user: JWTUser) -> str:
     expiration_time = datetime.utcnow() + timedelta(minutes=JWT_EXPIRE_AFTER_MINUTES)
     payload = {
-        "username": username,
+        "username": user.username,
+        "role": user.role,
         "exp": expiration_time
     }
     token = jwt.encode(payload, JWT_SECRET_KEY, algorithm=JWT_ALGORITHM)
@@ -64,21 +64,24 @@ def verify_jwt_token(token: str = Depends(oauth_schema)) -> bool:
 
         # Extract attributes from jwt payload
         username = payload.get("sub")
+        role = payload.get("role")
         expiration = payload.get("exp")
 
         # Check token has not expired
         if expiration < datetime.utcnow():
             # Check user exists in database
             if fake_jwt_user.username == username:
-                return verify_user_role(username)
+                return verify_user_role(role)
 
     except Exception as e:
-        return HTTP_401_UNAUTHORIZED
-    return HTTP_401_UNAUTHORIZED
+        return False
+    return False
 
 
-def verify_user_role(username: str) -> bool:
+def verify_user_role(role: str) -> bool:
+    if role == "administrator":
+        return True
+    return False
 
-    pass
 
 
