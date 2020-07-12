@@ -9,6 +9,8 @@ from .models.v1.jwt_user import JWTUser
 app = FastAPI()
 
 
+# TODO - Move token endpoint into v1 routes
+
 @app.post("/token")
 async def login_for_access_token(oauth_form: OAuth2PasswordRequestForm = Depends()):
     user_dict = {"username": oauth_form.username, "password": oauth_form.password}
@@ -19,13 +21,6 @@ async def login_for_access_token(oauth_form: OAuth2PasswordRequestForm = Depends
         return HTTP_401_UNAUTHORIZED
     else:
         return create_jwt_token(jwt_user)
-
-
-
-
-
-
-
 
 
 app.include_router(author.router, prefix="/v1")
