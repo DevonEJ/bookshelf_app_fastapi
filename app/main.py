@@ -1,16 +1,29 @@
 from fastapi import FastAPI, Depends
-from fastapi.security import OAuth2PasswordRequestForm, OAuth2PasswordBearer
+from fastapi.security import OAuth2PasswordRequestForm
+from starlette.status import HTTP_401_UNAUTHORIZED
 
 from .routes.v1 import author, book, home, user
+from .helpers.auth.auth import authenticate_user
+from .models.v1.jwt_user import JWTUser
 
 app = FastAPI()
-
-oauth_schema = OAuth2PasswordBearer(tokenUrl="/token")
 
 
 @app.post("/token")
 async def login_for_access_token(oauth_form: OAuth2PasswordRequestForm = Depends()):
-    pass
+    user_dict = {"username": oauth_form.username, "password": oauth_form.password}
+    unauth_user = JWTUser(**user_dict)
+
+    jwt_user = authenticate_user(unauth_user)
+    if jwt_user is None:
+        return HTTP_401_UNAUTHORIZED
+
+
+
+
+
+
+
 
 
 app.include_router(author.router, prefix="/v1")
