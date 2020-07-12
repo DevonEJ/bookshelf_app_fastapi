@@ -1,5 +1,6 @@
 import os
 from passlib.context import CryptContext
+from typing import Any, Dict
 from dotenv import find_dotenv, load_dotenv
 from datetime import datetime, timedelta
 from fastapi.security import OAuth2PasswordBearer
@@ -37,7 +38,7 @@ fake_jwt_user = JWTUser(**fake_jwt_user)
 
 
 # Creation of JWT
-def authenticate_user(user: JWTUser) -> JWTUser:
+def authenticate_user(user: JWTUser) -> Any:
     # If user is in the database
     if fake_jwt_user.username == user.username:
         if not fake_jwt_user.disabled:
@@ -48,7 +49,7 @@ def authenticate_user(user: JWTUser) -> JWTUser:
     return None
 
 
-def create_jwt_token(user: JWTUser) -> str:
+def create_jwt_token(user: JWTUser) -> Dict[str, Any]:
     expiration_time = datetime.utcnow() + timedelta(minutes=JWT_EXPIRE_AFTER_MINUTES)
     payload = {
         "username": user.username,
@@ -56,7 +57,7 @@ def create_jwt_token(user: JWTUser) -> str:
         "exp": expiration_time
     }
     token = jwt.encode(payload, JWT_SECRET_KEY, algorithm=JWT_ALGORITHM)
-    return token
+    return {"token": token}
 
 
 def verify_jwt_token(token: str = Depends(oauth_schema)) -> bool:
