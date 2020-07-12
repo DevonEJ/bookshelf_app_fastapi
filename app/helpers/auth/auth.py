@@ -37,14 +37,15 @@ fake_jwt_user = JWTUser(**fake_jwt_user)
 
 
 # Creation of JWT
-def authenticate_user(user: JWTUser) -> bool:
+def authenticate_user(user: JWTUser) -> JWTUser:
     # If user is in the database
     if fake_jwt_user.username == user.username:
         if not fake_jwt_user.disabled:
             if check_encrypted_password(user.password, encrypt_password(fake_jwt_user.password)):
-                return True
-
-    return False
+                # TODO - Remove after testing
+                user.role = "administrator"
+                return user
+    return None
 
 
 def create_jwt_token(user: JWTUser) -> str:
