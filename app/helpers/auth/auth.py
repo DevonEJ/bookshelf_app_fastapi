@@ -1,6 +1,11 @@
 import os
 from passlib.context import CryptContext
 from dotenv import find_dotenv, load_dotenv
+from datetime import datetime, timedelta
+from fastapi.security import OAuth2PasswordBearer
+from fastapi import Depends
+from starlette.status import HTTP_401_UNAUTHORIZED
+import jwt
 
 from app.models.v1.jwt_user import JWTUser
 
@@ -12,6 +17,8 @@ JWT_ALGORITHM = os.getenv("JWT_ALGORITHM")
 JWT_EXPIRE_AFTER_MINUTES = os.getenv("JWT_EXPIRE_AFTER_MINUTES")
 
 password_context = CryptContext(schemes=["bcrypt"])
+
+oauth_schema = OAuth2PasswordBearer(tokenUrl="/token")
 
 
 # Encryption and verification of passwords
@@ -41,6 +48,37 @@ def authenticate_user(username: str, password: str) -> bool:
     return False
 
 
-def create_jwt_token(username: str):
+def create_jwt_token(username: str) -> str:
+    expiration_time = datetime.utcnow() + timedelta(minutes=JWT_EXPIRE_AFTER_MINUTES)
+    payload = {
+        "username": username,
+        "exp": expiration_time
+    }
+    token = jwt.encode(payload, JWT_SECRET_KEY, algorithm=JWT_ALGORITHM)
+    return token
+
+
+def verify_jwt_token(token: str = Depends(oauth_schema)) -> bool:
+    try:
+        payload = jwt.decode(token, JWT_SECRET_KEY, algorithms=JWT_ALGORITHM)
+
+        # Extract attributes from jwt payload
+        username = payload.get("sub")
+        expiration = payload.get("exp")
+
+        # Check token has not expired
+        if expiration < datetime.utcnow():
+            # Check user exists in database
+            if fake_jwt_user.username == username:
+                return verify_user_role(username)
+
+    except Exception as e:
+        return HTTP_401_UNAUTHORIZED
+    return HTTP_401_UNAUTHORIZED
+
+
+def verify_user_role(username: str) -> bool:
+
     pass
+
 
