@@ -5,7 +5,8 @@ from dotenv import find_dotenv, load_dotenv
 from datetime import datetime, timedelta
 import time
 from fastapi.security import OAuth2PasswordBearer
-from fastapi import Depends
+from fastapi import Depends, HTTPException
+from starlette.status import HTTP_401_UNAUTHORIZED
 import jwt
 
 from app.models.v1.jwt_user import JWTUser
@@ -75,10 +76,8 @@ def verify_jwt_token(token: str = Depends(oauth_schema)) -> bool:
             # Check user exists in database
             if fake_jwt_user.username == username:
                 return verify_user_role(role)
-
     except Exception as e:
-        return False
-    return False
+        return HTTPException(status_code=HTTP_401_UNAUTHORIZED)
 
 
 def verify_user_role(role: str) -> bool:
