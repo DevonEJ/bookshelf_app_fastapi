@@ -3,6 +3,7 @@ from passlib.context import CryptContext
 from typing import Any, Dict
 from dotenv import find_dotenv, load_dotenv
 from datetime import datetime, timedelta
+import time
 from fastapi.security import OAuth2PasswordBearer
 from fastapi import Depends
 import jwt
@@ -70,7 +71,7 @@ def verify_jwt_token(token: str = Depends(oauth_schema)) -> bool:
         expiration = payload.get("exp")
 
         # Check token has not expired
-        if expiration < datetime.utcnow():
+        if expiration < time.time():
             # Check user exists in database
             if fake_jwt_user.username == username:
                 return verify_user_role(role)
