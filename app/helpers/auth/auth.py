@@ -1,6 +1,6 @@
 import os
 from passlib.context import CryptContext
-from typing import Any, Dict
+from typing import Any, Dict, Union
 from dotenv import find_dotenv, load_dotenv
 from datetime import datetime, timedelta
 import time
@@ -62,7 +62,7 @@ def create_jwt_token(user: JWTUser) -> Dict[str, Any]:
     return {"token": token}
 
 
-def verify_jwt_token(token: str = Depends(oauth_schema)) -> bool:
+def verify_jwt_token(token: str = Depends(oauth_schema)) -> Union[bool, HTTPException]:
     try:
         payload = jwt.decode(token, JWT_SECRET_KEY, algorithms=JWT_ALGORITHM)
 
@@ -76,14 +76,15 @@ def verify_jwt_token(token: str = Depends(oauth_schema)) -> bool:
             # Check user exists in database
             if fake_jwt_user.username == username:
                 return verify_user_role(role)
-    except Exception as e:
+    except Exception:
         return HTTPException(status_code=HTTP_401_UNAUTHORIZED)
+    return HTTPException(status_code=HTTP_401_UNAUTHORIZED)
 
 
-def verify_user_role(role: str) -> bool:
+def verify_user_role(role: str) -> Union[bool, HTTPException]:
     if role == "administrator":
         return True
-    return False
+    return HTTPException(status_code=HTTP_401_UNAUTHORIZED)
 
 
 
