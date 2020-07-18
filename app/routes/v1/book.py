@@ -30,7 +30,29 @@ async def get_book_by_isbn(isbn: str):
     return book
 
 
-#TODO Fix 'unable to parse request body' error
+author_dict = {
+        "id": "123",
+        "name": "Tolkein",
+        "country": "England",
+        "gender": "male",
+        "deceased": True,
+        "books": ["0000"]
+}
+author = Author(**author_dict)
+
+book_dict = {
+    "id": "0000",
+    "name": "The Lord of the Rings",
+    "isbn": "fgfg434233232",
+    "author": author,
+    "genre": "fantasy",
+    "read_count": "five"
+}
+book = Book(**book_dict)
+
+print(book)
+
+
 @router.post("/book/image")
 async def upload_book_image(book_image: bytes = File(...)):
     return {"File": book_image}
