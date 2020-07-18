@@ -46,7 +46,7 @@ book_dict = {
     "isbn": "fgfg434233232",
     "author": author,
     "genre": "fantasy",
-    "read_count": "five"
+    "read_count": 1
 }
 book = Book(**book_dict)
 
